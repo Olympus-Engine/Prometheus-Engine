@@ -1,0 +1,114 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+}
+
+group = 'fr.olympus-engine'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    implementation "io.github.classgraph:classgraph:4.8.184"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21) // Ou ta version cible (11, 21, etc.)
+    }
+    // Ces deux lignes génèrent automatiquement les JARs sources et javadoc requis par Maven Central
+    withJavadocJar()
+    withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+tasks.withType(Javadoc).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            pom {
+                name = 'Prometheus Engine'
+                description = 'A technical library for create, manage and use craft systems'
+                url = 'https://github.com/Olympus-Engine/Prometheus-Engine' // URL du projet
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'Mr_qsdf'
+                        name = 'Mr_qsdf'
+                        email = 'maqw@free.fr'
+                    }
+                }
+
+                scm {
+                    connection = 'scm:git:git://github.com/Olympus-Engine/Prometheus-Engine.git'
+                    developerConnection = 'scm:git:ssh://github.com:Olympus-Engine/Prometheus-Engine.git'
+                    url = 'https://github.com/Olympus-Engine/Prometheus-Engine'
+                }
+            }
+        }
+    }
+
+    // On publie d'abord dans un dossier local pour créer le bundle
+    repositories {
+        maven {
+            name = "StagingDirectory"
+            url = layout.buildDirectory.dir("repos/staging")
+        }
+
+        maven {
+            name = "OSSRH"
+            // URL pour le nouveau portail Central (Central Portal)
+            url = "https://central.sonatype.com/api/v1/publisher/upload"
+
+            credentials {
+                username = ossrhUsername
+                password = ossrhPassword
+            }
+        }
+    }
+}
+
+// Signature des artefacts (s'active uniquement si on lance la tâche de publish)
+signing {
+    // Nécessaire pour signer les fichiers .asc
+    sign publishing.publications.mavenJava
+}
+
+tasks.register('generateCentralBundle', Zip) {
+    dependsOn 'publishMavenJavaPublicationToStagingDirectoryRepository'
+
+    // CORRECTION MAJEURE :
+    // On prend les fichiers depuis la racine du dossier "staging".
+    // Ainsi, le ZIP contiendra automatiquement les dossiers : fr/olympus-engine/Hephaestus-Engine/1.0/...
+    from layout.buildDirectory.dir("repos/staging")
+
+    // On s'assure d'inclure les checksums (md5, sha1, etc.) car le portail les réclame
+    include "**/*"
+
+    archiveFileName = "bundle.zip"
+    destinationDirectory = layout.buildDirectory.dir("libs")
+}
