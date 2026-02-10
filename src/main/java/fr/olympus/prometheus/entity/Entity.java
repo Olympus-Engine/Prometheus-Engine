@@ -2,6 +2,10 @@ package fr.olympus.prometheus.entity;
 
 import java.util.UUID;
 
+/**
+ * Abstract base class for all entities in the system.
+ * Provides common properties and methods for managing entity metadata and state.
+ */
 public abstract class Entity implements IEntity {
 
 
@@ -22,6 +26,11 @@ public abstract class Entity implements IEntity {
      * Indicates whether the entity is alive.
      */
     protected boolean isAlive;
+
+    /**
+     * Groups that this entity belongs to.
+     */
+    protected String[] groups;
 
     /**
      * Constructs a new Entity with the specified name.
@@ -49,11 +58,12 @@ public abstract class Entity implements IEntity {
      * @param registryId The unique identifier in the registry.
      * @throws IllegalArgumentException if registryId is null or blank.
      */
-    public void setRegistryMeta(String registryId) {
+    public void setRegistryMeta(String registryId, String[] groups) {
         if (registryId == null || registryId.isBlank())
             throw new IllegalArgumentException("Registry ID cannot be null or blank");
         this.registryId = registryId;
         this.currentUUID = UUID.randomUUID();
+        this.groups = groups;
     }
 
     /**
@@ -87,6 +97,14 @@ public abstract class Entity implements IEntity {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Gets the groups that this entity belongs to.
+     * @return An array of group names that this entity belongs to.
+     */
+    public String[] entityGroup() {
+        return groups;
     }
 
 

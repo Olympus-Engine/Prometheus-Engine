@@ -24,8 +24,9 @@ public interface IEntity {
     /**
      * Sets the metadata for the entity registry based on the provided registry ID.
      * @param registryId A string representing the unique identifier for the entity registry.
+     * @param groups An array of strings representing the groups to which the entity belongs.
      */
-    void setRegistryMeta(String registryId);
+    void setRegistryMeta(String registryId, String[] groups);
 
     /**
      * Checks if the entity is alive.
@@ -56,5 +57,11 @@ public interface IEntity {
         }
         Prometheus.getData().destroyEntity(this);
     }
+
+    /**
+     * Gets the entity group to which this entity belongs.
+     * @return An array of strings representing the entity group(s) to which this entity belongs.
+     */
+    String[] entityGroup();
 
 }

@@ -74,13 +74,13 @@ public class PrometheusData {
      * @param registryId The unique identifier of the entity in the registry to create.
      * @return An instance of Entity corresponding to the provided registry identifier.
      */
-    public Entity createEntity(String registryId) {
+    public IEntity createEntity(String registryId) {
         EntityRegistryEntry entry = entitiesRegistry.get(registryId);
         if (entry == null) {
             throw new IllegalArgumentException("No entity found for registry id: " + registryId);
         }
-        Entity entity = (Entity) entry.createInstance();
-        entity.setRegistryMeta(registryId);
+        IEntity entity = entry.createInstance();
+        entity.setRegistryMeta(registryId, entry.groups());
         loadedEntities.add(entity);
         return entity;
     }
@@ -91,5 +91,20 @@ public class PrometheusData {
      */
     public void destroyEntity(IEntity iEntity) {
         loadedEntities.remove(iEntity);
+    }
+
+    /**
+     * Checks which entities in the registry belong to any of the specified groups and returns their unique identifiers.
+     * @param groupsId The unique identifiers of the groups to check against.
+     * @return A list of unique identifiers of entities that belong to any of the specified groups.
+     */
+    public List<String> isInGroups(String... groupsId){
+        List<String> groups = new ArrayList<>();
+        for (EntityRegistryEntry entry : entitiesRegistry.values()) {
+            if (entry.hasGroups(groupsId)) {
+                groups.add(entry.id());
+            }
+        }
+        return groups;
     }
 }

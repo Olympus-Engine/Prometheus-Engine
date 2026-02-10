@@ -6,6 +6,10 @@ import fr.olympus.prometheus.resources.PrometheusData;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * Main class for the Prometheus framework.
+ * Provides methods for initializing the framework, registering components, and accessing data.
+ */
 public class Prometheus {
 
     /**

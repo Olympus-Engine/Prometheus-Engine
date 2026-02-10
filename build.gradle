@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'fr.olympus-engine'
-version = '1.0.0'
+version = '1.1.0'
 
 repositories {
     mavenCentral()
@@ -45,7 +45,7 @@ publishing {
             from components.java
             pom {
                 name = 'Prometheus Engine'
-                description = 'A technical library for create, manage and use craft systems'
+                description = 'A technical library for create, manage and use Entity systems'
                 url = 'https://github.com/Olympus-Engine/Prometheus-Engine' // URL du projet
 
                 licenses {
