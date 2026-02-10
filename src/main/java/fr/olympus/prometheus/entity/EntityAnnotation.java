@@ -19,4 +19,10 @@ public @interface EntityAnnotation {
      */
     String id();
 
+    /**
+     * Gets the groups that the entity belongs to.
+     * @return An array of strings representing the groups that the entity belongs to.
+     */
+    String[] groups() default {};
+
 }

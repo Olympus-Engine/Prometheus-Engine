@@ -9,8 +9,9 @@ import java.util.function.Supplier;
  *
  * @param id The unique identifier for the entity.
  * @param supplier A supplier that provides instances of the entity when requested.
+ * @param groups An array of group identifiers that this entity belongs to, used for categorization and retrieval purposes.
  */
-public record EntityRegistryEntry(String id, Supplier<? extends IEntity> supplier) {
+public record EntityRegistryEntry(String id, Supplier<? extends IEntity> supplier, String[] groups) {
 
     /**
      * Constructs a new EntityRegistryEntry with the specified unique identifier and supplier.
@@ -21,6 +22,7 @@ public record EntityRegistryEntry(String id, Supplier<? extends IEntity> supplie
     public EntityRegistryEntry {
         if (id == null) throw new IllegalArgumentException("Entity id cannot be null");
         if (supplier == null) throw new IllegalArgumentException("Entity supplier cannot be null");
+        if (groups == null) throw new IllegalArgumentException("Entity groups cannot be null");
     }
 
     /**
@@ -31,6 +33,30 @@ public record EntityRegistryEntry(String id, Supplier<? extends IEntity> supplie
      */
     public IEntity createInstance() {
         return supplier.get();
+    }
+
+    /**
+     * Checks if the entity belongs to a specific group.
+     * @param group The group identifier to check against the entity's groups.
+     * @return true if the entity belongs to the specified group, false otherwise.
+     */
+    public boolean hasGroup(String group) {
+        for (String g : groups) {
+            if (g.equals(group)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the entity belongs to all specified groups.
+     * @param groups An array of group identifiers to check against the entity's groups.
+     * @return true if the entity belongs to all specified groups, false otherwise.
+     */
+    public boolean hasGroups(String... groups) {
+        for (String group : groups) {
+            if (!hasGroup(group)) return false;
+        }
+        return true;
     }
 
 

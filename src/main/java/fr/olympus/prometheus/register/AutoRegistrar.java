@@ -58,7 +58,8 @@ public final class AutoRegistrar {
 
                     EntityRegistryEntry entry = new EntityRegistryEntry(
                             ann.id(),
-                            () -> newInstance(clazz)
+                            () -> newInstance(clazz),
+                            ann.groups()
                     );
                     data.registerEntity(entry);
                 }
