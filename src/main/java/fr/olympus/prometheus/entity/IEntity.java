@@ -11,37 +11,43 @@ public interface IEntity {
 
     /**
      * Gets the unique identifier for the entity registry.
+     *
      * @return A string representing the unique identifier for the entity registry.
      */
     String getRegistryId();
 
     /**
      * Gets the name of the entity.
+     *
      * @return A string representing the name of the entity.
      */
     String getName();
 
     /**
      * Sets the metadata for the entity registry based on the provided registry ID.
+     *
      * @param registryId A string representing the unique identifier for the entity registry.
-     * @param groups An array of strings representing the groups to which the entity belongs.
+     * @param groups     An array of strings representing the groups to which the entity belongs.
      */
     void setRegistryMeta(String registryId, String[] groups);
 
     /**
      * Checks if the entity is alive.
+     *
      * @return true if the entity is alive, false otherwise.
      */
     boolean isAlive();
 
     /**
      * Sets the alive status of the entity.
+     *
      * @param alive A boolean value indicating whether the entity is alive (true) or dead (false).
      */
     void setAlive(boolean alive);
 
     /**
      * Gets the current UUID of the entity.
+     *
      * @return A UUID representing the current unique identifier of the entity.
      */
     UUID currentUUID();
@@ -60,8 +66,25 @@ public interface IEntity {
 
     /**
      * Gets the entity group to which this entity belongs.
+     *
      * @return An array of strings representing the entity group(s) to which this entity belongs.
      */
     String[] entityGroup();
+
+    /**
+     * Checks if the entity belongs to a specific group.
+     *
+     * @param group A string representing the group to check for membership.
+     * @return true if the entity belongs to the specified group, false otherwise.
+     */
+    boolean hasGroup(String group);
+
+    /**
+     * Checks if the entity belongs to any of the specified groups.
+     *
+     * @param groups An array of strings representing the groups to check for membership.
+     * @return true if the entity belongs to any of the specified groups, false otherwise.
+     */
+    boolean hasGroups(String[] groups);
 
 }

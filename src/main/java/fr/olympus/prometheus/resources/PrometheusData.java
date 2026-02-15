@@ -107,4 +107,44 @@ public class PrometheusData {
         }
         return groups;
     }
+
+
+    /**
+     * Retrieves the list of currently loaded entities.
+     * @return A list of IEntity instances representing the currently loaded entities.
+     */
+
+    public List<IEntity> getLoadedEntities() {
+        return loadedEntities;
+    }
+
+    /**
+     * Retrieves a list of currently loaded entities that belong to any of the specified groups.
+     * @param groupsId The unique identifiers of the groups to check against.
+     * @return A list of IEntity instances representing the currently loaded entities that belong to any of the specified groups.
+     */
+    public List<IEntity> getLoadedEntitiesInGroups(String... groupsId) {
+        List<IEntity> entities = new ArrayList<>();
+        for (IEntity entity : loadedEntities) {
+            if (entity.hasGroups(groupsId)) {
+                entities.add(entity);
+            }
+        }
+        return entities;
+    }
+
+    /**
+     * Retrieves a list of currently loaded entities that have the specified registry identifier.
+     * @param registryId The unique identifier of the registry to check against.
+     * @return A list of IEntity instances representing the currently loaded entities that have the specified registry identifier.
+     */
+    public List<IEntity> getLoadedEntitiesWithId(String registryId) {
+        List<IEntity> entities = new ArrayList<>();
+        for (IEntity entity : loadedEntities) {
+            if (entity.getRegistryId().equals(registryId)) {
+                entities.add(entity);
+            }
+        }
+        return entities;
+    }
 }
