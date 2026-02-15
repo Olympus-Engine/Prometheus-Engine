@@ -107,5 +107,31 @@ public abstract class Entity implements IEntity {
         return groups;
     }
 
+    /**
+     * Checks if the entity belongs to a specific group.
+     * @param group The name of the group to check.
+     * @return true if the entity belongs to the specified group, false otherwise.
+     */
+    @Override
+    public boolean hasGroup(String group) {
+        if (groups == null) return false;
+        for (String g : groups) {
+            if (g.equals(group)) return true;
+        }
+        return false;
+    }
 
+    /**
+     * Checks if the entity belongs to all of the specified groups.
+     * @param groups An array of group names to check.
+     * @return true if the entity belongs to all of the specified groups, false otherwise.
+     */
+    @Override
+    public boolean hasGroups(String[] groups) {
+        if (groups == null) return false;
+        for (String group : groups) {
+            if (!hasGroup(group)) return false;
+        }
+        return true;
+    }
 }
