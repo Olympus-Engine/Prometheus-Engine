@@ -9,6 +9,7 @@ import fr.olympus.prometheus.register.EvolutionRegistryEntry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -107,4 +108,73 @@ public class PrometheusData {
         }
         return groups;
     }
+
+
+    /**
+     * Retrieves the list of currently loaded entities.
+     * @return A list of IEntity instances representing the currently loaded entities.
+     */
+
+    public List<IEntity> getLoadedEntities() {
+        return loadedEntities;
+    }
+
+    /**
+     * Retrieves a list of currently loaded entities that belong to any of the specified groups.
+     * @param groupsId The unique identifiers of the groups to check against.
+     * @return A list of IEntity instances representing the currently loaded entities that belong to any of the specified groups.
+     */
+    public List<IEntity> getLoadedEntitiesInGroups(String... groupsId) {
+        List<IEntity> entities = new ArrayList<>();
+        for (IEntity entity : loadedEntities) {
+            if (entity.hasGroups(groupsId)) {
+                entities.add(entity);
+            }
+        }
+        return entities;
+    }
+
+    /**
+     * Retrieves a list of currently loaded entities that have the specified registry identifier.
+     * @param registryId The unique identifier of the registry to check against.
+     * @return A list of IEntity instances representing the currently loaded entities that have the specified registry identifier.
+     */
+    public List<IEntity> getLoadedEntitiesWithId(String registryId) {
+        List<IEntity> entities = new ArrayList<>();
+        for (IEntity entity : loadedEntities) {
+            if (entity.getRegistryId().equals(registryId)) {
+                entities.add(entity);
+            }
+        }
+        return entities;
+    }
+
+    /**
+     * Retrieves a list of currently loaded entities that have any of the specified registry identifiers.
+     * @param registryIds The unique identifiers of the registries to check against.
+     * @return A list of IEntity instances representing the currently loaded entities that have any of the specified registry identifiers.
+     */
+    public List<IEntity> getLoadedEntitiesWithIds(String... registryIds) {
+        List<IEntity> entities = new ArrayList<>();
+        for (String registryId : registryIds) {
+            entities.addAll(getLoadedEntitiesWithId(registryId));
+        }
+        return entities;
+    }
+
+    /**
+     * Retrieves a currently loaded entity that has the specified unique identifier (UUID).
+     * @param uuid The unique identifier (UUID) of the entity to retrieve.
+     * @return An instance of IEntity representing the currently loaded entity with the specified UUID, or null if no such entity is found.
+     */
+    public IEntity getLoadedEntityWithUUID(UUID uuid) {
+        for (IEntity entity : loadedEntities) {
+            if (entity.currentUUID().equals(uuid)) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
+
 }
